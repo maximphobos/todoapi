@@ -10,7 +10,7 @@ namespace ToDoListWebApi.Persistence.Contexts
         {
         }
 
-        public virtual DbSet<ToDoTask>? ToDoTasks { get; set; }
+        public virtual DbSet<ToDoTask> ToDoTasks { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
