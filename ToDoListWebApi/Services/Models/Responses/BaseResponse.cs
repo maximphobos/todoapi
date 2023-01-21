@@ -1,4 +1,4 @@
-﻿namespace ToDoListWebApi.Persistence.Models.Responses
+﻿namespace ToDoListWebApi.Services.Models.Responses
 {
     public class BaseResponse
     {

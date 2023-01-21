@@ -21,11 +21,13 @@ namespace ToDoListWebApi.Persistence.Repositories
             try
             {
                 getAllToDoTasksAsyncResponse.ToDoTasks = await _toDoListContext.ToDoTasks.ToListAsync();
+
+                getAllToDoTasksAsyncResponse.SuccessMessage = $"Received {getAllToDoTasksAsyncResponse.ToDoTasks.Count} records.";
             }
             catch (Exception exc)
             {
                 getAllToDoTasksAsyncResponse.Error = true;
-                getAllToDoTasksAsyncResponse.ErrorMessage = $"There was an error during GetAllToDoTasksAsync " +
+                getAllToDoTasksAsyncResponse.ErrorMessage = $"There was an error during GetAllToDoTasksAsync repository " +
                     $"method execution. Error message: {exc.Message}";
             }
 
@@ -47,25 +49,25 @@ namespace ToDoListWebApi.Persistence.Repositories
                     if (result != null)
                     {
                         getToDoTaskByIdAsyncResponse.ToDoTask = result;
+                        getToDoTaskByIdAsyncResponse.SuccessMessage = $"TODO task with Id={result.Id} was successfully found.";
                     }
                     else
                     {
                         getToDoTaskByIdAsyncResponse.Error = true;
-                        getToDoTaskByIdAsyncResponse.ErrorMessage = $"TODO task with Id={taskId} not found " +
-                            $"at {DateTime.Now}.";
+                        getToDoTaskByIdAsyncResponse.ErrorMessage = $"TODO task with Id={taskId} was not found.";
                     }
                 }
                 else
                 {
                     getToDoTaskByIdAsyncResponse.Error = true;
-                    getToDoTaskByIdAsyncResponse.ErrorMessage = $"DbSet was null at {DateTime.Now}.";
+                    getToDoTaskByIdAsyncResponse.ErrorMessage = $"DbSet was null.";
                 }
             }
             catch (Exception exc)
             {
                 getToDoTaskByIdAsyncResponse.Error = true;
-                getToDoTaskByIdAsyncResponse.ErrorMessage = $"There was an error during GetToDoTaskByIdAsync " +
-                    $"method execution at {DateTime.Now}. Error message: {exc.Message}";
+                getToDoTaskByIdAsyncResponse.ErrorMessage = $"There was an error during GetToDoTaskByIdAsync repository " +
+                    $"method execution. Error message: {exc.Message}";
             }
 
             return getToDoTaskByIdAsyncResponse;
@@ -85,19 +87,20 @@ namespace ToDoListWebApi.Persistence.Repositories
                 if (!addedItem.Error && addedItem.ToDoTask != null)
                 {
                     addNewToDoTaskAsyncResponse.ToDoTask = addedItem.ToDoTask;
+                    addNewToDoTaskAsyncResponse.SuccessMessage = $"New TODO task was added with Id={addedItem.ToDoTask.Id}.";
                 }
                 else
                 {
                     addNewToDoTaskAsyncResponse.Error = true;
                     addNewToDoTaskAsyncResponse.ErrorMessage = $"New TODO task {toDoTask.TaskBodyText} was not " +
-                        $"saved into the database because of some uncaught reason at {DateTime.Now}.";
+                        $"saved into the database because of some uncaught reason.";
                 }
             }
             catch (Exception exc)
             {
                 addNewToDoTaskAsyncResponse.Error = true;
-                addNewToDoTaskAsyncResponse.ErrorMessage = $"There wan an error during AddNewToDoTaskAsync " +
-                    $"method execution at {DateTime.Now}. Error message: {exc.Message}";
+                addNewToDoTaskAsyncResponse.ErrorMessage = $"There wan an error during AddNewToDoTaskAsync repository " +
+                    $"method execution. Error message: {exc.Message}";
             }
             
             return addNewToDoTaskAsyncResponse;
@@ -114,18 +117,33 @@ namespace ToDoListWebApi.Persistence.Repositories
                 if (!itemToBeDeleted.Error && itemToBeDeleted.ToDoTask != null)
                 {
                     _toDoListContext.ToDoTasks.Remove(itemToBeDeleted.ToDoTask);
+                    await _toDoListContext.SaveChangesAsync();
+
+                    //Check if item successfully removed
+                    var deletedItem = await GetToDoTaskByIdAsync(itemToBeDeleted.ToDoTask.Id);
+
+                    if (deletedItem != null)
+                    {
+                        deleteToDoTaskAsyncResponse.Error = true;
+                        deleteToDoTaskAsyncResponse.ErrorMessage = $"TODO task with Id={deletedItem.ToDoTask?.Id} was not deleted " +
+                            $"for the some uncaught reason.";
+                    }
+                    else
+                    {
+                        deleteToDoTaskAsyncResponse.SuccessMessage = $"TODO task with Id={taskId} was deleted successfully.";
+                    }
                 }
                 else
                 {
                     deleteToDoTaskAsyncResponse.Error = true;
-                    deleteToDoTaskAsyncResponse.ErrorMessage = $"TODO task with Id={taskId} not found at {DateTime.Now}.";
+                    deleteToDoTaskAsyncResponse.ErrorMessage = $"TODO task with Id={taskId} was not found.";
                 }
             }
             catch (Exception exc)
             {
                 deleteToDoTaskAsyncResponse.Error = true;
-                deleteToDoTaskAsyncResponse.ErrorMessage = $"There was an error during DeleteToDoTaskAsync method" +
-                    $" at {DateTime.Now}. Error message: {exc.Message}";
+                deleteToDoTaskAsyncResponse.ErrorMessage = $"There was an error during DeleteToDoTaskAsync repository method execution. " +
+                    $"Error message: {exc.Message}";
             }
 
             return deleteToDoTaskAsyncResponse;

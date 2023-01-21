@@ -1,5 +1,6 @@
 using ToDoListWebApi.Persistence.Contexts;
 using ToDoListWebApi.Persistence.Repositories;
+using ToDoListWebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddTransient<IToDoListRepository, ToDoListRepository>();
 
 //Register custom services
 builder.Services.AddScoped<IToDoListRepository, ToDoListRepository>();
+builder.Services.AddScoped<IToDoListService, ToDoListService>();
 
 
 var app = builder.Build();
