@@ -80,14 +80,15 @@ namespace ToDoListWebApi.Persistence.Repositories
             try
             {
                 await _toDoListContext.ToDoTasks.AddAsync(toDoTask);
-                var addedTaskId = await _toDoListContext.SaveChangesAsync();
+                await _toDoListContext.SaveChangesAsync();
 
-                var addedItem = await GetToDoTaskByIdAsync(addedTaskId);
+                var addedItem = await _toDoListContext.ToDoTasks.FirstAsync(t => t.CreatedOn == toDoTask.CreatedOn 
+                    && t.TaskBodyText == toDoTask.TaskBodyText);
 
-                if (!addedItem.Error && addedItem.ToDoTask != null)
+                if (addedItem != null)
                 {
-                    addNewToDoTaskAsyncResponse.ToDoTask = addedItem.ToDoTask;
-                    addNewToDoTaskAsyncResponse.SuccessMessage = $"New TODO task was added with Id={addedItem.ToDoTask.Id}.";
+                    addNewToDoTaskAsyncResponse.ToDoTask = addedItem;
+                    addNewToDoTaskAsyncResponse.SuccessMessage = $"New TODO task was successfully added with Id={addedItem.Id}.";
                 }
                 else
                 {
@@ -122,7 +123,7 @@ namespace ToDoListWebApi.Persistence.Repositories
                     //Check if item successfully removed
                     var deletedItem = await GetToDoTaskByIdAsync(itemToBeDeleted.ToDoTask.Id);
 
-                    if (deletedItem != null)
+                    if (!deletedItem.Error && deletedItem.ToDoTask != null)
                     {
                         deleteToDoTaskAsyncResponse.Error = true;
                         deleteToDoTaskAsyncResponse.ErrorMessage = $"TODO task with Id={deletedItem.ToDoTask?.Id} was not deleted " +
