@@ -2,6 +2,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Reflection;
 using ToDoListWebApi.Infrastructure.Mapping;
 using ToDoListWebApi.Persistence.Contexts;
 using ToDoListWebApi.Persistence.Repositories;
@@ -13,7 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
-builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+//Fluent validation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 builder.Services.AddSwaggerGen(c => c.AddFluentValidationRulesScoped());
 
@@ -28,10 +31,6 @@ builder.Services.AddTransient<IToDoListRepository, ToDoListRepository>();
 
 //Register custom services
 builder.Services.AddScoped<IToDoListService, ToDoListService>();
-
-//Validators
-builder.Services.AddTransient<IValidator<ToDoTaskViewModel>, ToDoTaskViewModelValidator>();
-builder.Services.AddTransient<IValidator<ToDoTaskAddViewModel>, ToDoTaskAddViewModelValidator>();
 
 //Infrastructure
 builder.Services.AddAutoMapper(typeof(MapperProfile));
