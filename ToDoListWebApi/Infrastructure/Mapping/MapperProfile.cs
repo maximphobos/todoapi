@@ -8,7 +8,6 @@ namespace ToDoListWebApi.Infrastructure.Mapping
     {
         public MapperProfile()
         {
-            CreateMap<ToDoTask, ToDoTaskViewModel>();
             CreateMap<ToDoTask, ToDoTaskViewModel>().ReverseMap();
         }
     }
