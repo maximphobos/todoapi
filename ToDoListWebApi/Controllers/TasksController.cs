@@ -1,30 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ToDoListWebApi.Services;
 using ToDoListWebApi.Services.Models.Requests;
+using ToDoListWebApi.Services.Models.Responses;
 using ToDoListWebApi.ViewModels.ToDoListViewModels;
 
 namespace ToDoListWebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ToDoListController : ControllerBase
+    public class TasksController : ControllerBase
     {
         private readonly IToDoListService _toDoListService;
 
-        public ToDoListController(IToDoListService toDoListService)
+        public TasksController(IToDoListService toDoListService)
         {
             _toDoListService = toDoListService;
         }
 
         [HttpGet]
-        [Route("GetAllToDoTasksAsync")]
-        public async Task<ActionResult> GetAllToDoTasksAsync()
+        public async Task<ActionResult<GetAllToDoTasksAsyncResponse>> GetAllToDoTasksAsync()
         {
             var result = await _toDoListService.GetAllToDoTasksAsync();
 
             if (!result.Error)
             {
-                return Ok(result);
+                return result;
             }
             else
             {
@@ -32,9 +32,8 @@ namespace ToDoListWebApi.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("GetToDoTaskByIdAsync")]
-        public async Task<ActionResult> GetToDoTaskByIdAsync(int taskId)
+        [HttpGet("{taskId:int}")]
+        public async Task<ActionResult<GetToDoTaskByIdAsyncResponse>> GetToDoTaskByIdAsync(int taskId)
         {
             var result = await _toDoListService.GetToDoTaskByIdAsync(new GetToDoTaskByIdAsyncRequest()
             {
@@ -43,7 +42,7 @@ namespace ToDoListWebApi.Controllers
 
             if (!result.Error)
             {
-                return Ok(result);
+                return result;
             }
             else
             {
@@ -52,8 +51,7 @@ namespace ToDoListWebApi.Controllers
         }
 
         [HttpPost]
-        [Route("AddNewToDoTaskAsync")]
-        public async Task<ActionResult> AddNewToDoTaskAsync(ToDoTaskAddViewModel toDoTaskAddViewModel)
+        public async Task<ActionResult<AddNewToDoTaskAsyncResponse>> AddNewToDoTaskAsync(ToDoTaskAddViewModel toDoTaskAddViewModel)
         {
             var result = await _toDoListService.AddNewToDoTaskAsync(new AddNewToDoTaskAsyncRequest()
             {
@@ -66,7 +64,7 @@ namespace ToDoListWebApi.Controllers
 
             if (!result.Error)
             {
-                return Ok(result);
+                return result;
             }
             else
             {
@@ -75,8 +73,7 @@ namespace ToDoListWebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteToDoTaskAsync")]
-        public async Task<ActionResult> DeleteToDoTaskAsync(int taskId)
+        public async Task<ActionResult<DeleteToDoTaskAsyncResponse>> DeleteToDoTaskAsync(int taskId)
         {
             var result = await _toDoListService.DeleteToDoTaskAsync(new DeleteToDoTaskAsyncRequest()
             {
@@ -85,7 +82,7 @@ namespace ToDoListWebApi.Controllers
 
             if (!result.Error)
             {
-                return Ok(result);
+                return result;
             }
             else
             {
