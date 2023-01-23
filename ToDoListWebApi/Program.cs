@@ -27,7 +27,6 @@ builder.Services.AddDbContext<ToDoListContext>();
 builder.Services.AddTransient<IToDoListRepository, ToDoListRepository>();
 
 //Register custom services
-builder.Services.AddScoped<IToDoListRepository, ToDoListRepository>();
 builder.Services.AddScoped<IToDoListService, ToDoListService>();
 
 //Validators
