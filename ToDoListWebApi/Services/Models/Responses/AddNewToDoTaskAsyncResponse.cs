@@ -1,9 +1,8 @@
 ﻿using ToDoListWebApi.ViewModels.ToDoListViewModels;
 
-namespace ToDoListWebApi.Services.Models.Responses
+namespace ToDoListWebApi.Services.Models.Responses;
+
+public class AddNewToDoTaskAsyncResponse : BaseResponse
 {
-    public class AddNewToDoTaskAsyncResponse : BaseResponse
-    {
-        public ToDoTaskViewModel? ToDoTaskViewModel { get; set; }
-    }
+    public ToDoTaskViewModel? ToDoTaskViewModel { get; set; }
 }

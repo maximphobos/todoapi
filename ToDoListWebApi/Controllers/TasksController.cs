@@ -4,90 +4,89 @@ using ToDoListWebApi.Services.Models.Requests;
 using ToDoListWebApi.Services.Models.Responses;
 using ToDoListWebApi.ViewModels.ToDoListViewModels;
 
-namespace ToDoListWebApi.Controllers
+namespace ToDoListWebApi.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class TasksController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class TasksController : ControllerBase
+    private readonly IToDoListService _toDoListService;
+
+    public TasksController(IToDoListService toDoListService)
     {
-        private readonly IToDoListService _toDoListService;
+        _toDoListService = toDoListService;
+    }
 
-        public TasksController(IToDoListService toDoListService)
+    [HttpGet]
+    public async Task<ActionResult<GetAllToDoTasksAsyncResponse>> GetAllToDoTasksAsync()
+    {
+        var result = await _toDoListService.GetAllToDoTasksAsync();
+
+        if (!result.Error)
         {
-            _toDoListService = toDoListService;
+            return result;
         }
-
-        [HttpGet]
-        public async Task<ActionResult<GetAllToDoTasksAsyncResponse>> GetAllToDoTasksAsync()
+        else
         {
-            var result = await _toDoListService.GetAllToDoTasksAsync();
-
-            if (!result.Error)
-            {
-                return result;
-            }
-            else
-            {
-                return BadRequest(result);
-            }
+            return BadRequest(result);
         }
+    }
 
-        [HttpGet("{taskId:int}")]
-        public async Task<ActionResult<GetToDoTaskByIdAsyncResponse>> GetToDoTaskByIdAsync(int taskId)
+    [HttpGet("{taskId:int}")]
+    public async Task<ActionResult<GetToDoTaskByIdAsyncResponse>> GetToDoTaskByIdAsync(int taskId)
+    {
+        var result = await _toDoListService.GetToDoTaskByIdAsync(new GetToDoTaskByIdAsyncRequest()
         {
-            var result = await _toDoListService.GetToDoTaskByIdAsync(new GetToDoTaskByIdAsyncRequest()
-            {
-                TaskId = taskId
-            });
+            TaskId = taskId
+        });
 
-            if (!result.Error)
-            {
-                return result;
-            }
-            else
-            {
-                return BadRequest(result);
-            }
+        if (!result.Error)
+        {
+            return result;
         }
-
-        [HttpPost]
-        public async Task<ActionResult<AddNewToDoTaskAsyncResponse>> AddNewToDoTaskAsync(ToDoTaskAddViewModel toDoTaskAddViewModel)
+        else
         {
-            var result = await _toDoListService.AddNewToDoTaskAsync(new AddNewToDoTaskAsyncRequest()
-            {
-                ToDoTaskViewModel = new ToDoTaskViewModel()
-                {
-                    CreatedOn = DateTime.Now,
-                    TaskBodyText = toDoTaskAddViewModel.TaskBodyText
-                }
-            });
-
-            if (!result.Error)
-            {
-                return result;
-            }
-            else
-            {
-                return BadRequest(result);
-            }
+            return BadRequest(result);
         }
+    }
 
-        [HttpDelete]
-        public async Task<ActionResult<DeleteToDoTaskAsyncResponse>> DeleteToDoTaskAsync(int taskId)
+    [HttpPost]
+    public async Task<ActionResult<AddNewToDoTaskAsyncResponse>> AddNewToDoTaskAsync(ToDoTaskAddViewModel toDoTaskAddViewModel)
+    {
+        var result = await _toDoListService.AddNewToDoTaskAsync(new AddNewToDoTaskAsyncRequest()
         {
-            var result = await _toDoListService.DeleteToDoTaskAsync(new DeleteToDoTaskAsyncRequest()
+            ToDoTaskViewModel = new ToDoTaskViewModel()
             {
-                TaskId = taskId
-            });
+                CreatedOn = DateTime.Now,
+                TaskBodyText = toDoTaskAddViewModel.TaskBodyText
+            }
+        });
 
-            if (!result.Error)
-            {
-                return result;
-            }
-            else
-            {
-                return BadRequest(result);
-            }
+        if (!result.Error)
+        {
+            return result;
+        }
+        else
+        {
+            return BadRequest(result);
+        }
+    }
+
+    [HttpDelete]
+    public async Task<ActionResult<DeleteToDoTaskAsyncResponse>> DeleteToDoTaskAsync(int taskId)
+    {
+        var result = await _toDoListService.DeleteToDoTaskAsync(new DeleteToDoTaskAsyncRequest()
+        {
+            TaskId = taskId
+        });
+
+        if (!result.Error)
+        {
+            return result;
+        }
+        else
+        {
+            return BadRequest(result);
         }
     }
 }

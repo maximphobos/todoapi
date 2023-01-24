@@ -2,13 +2,12 @@
 using ToDoListWebApi.Persistence.Models;
 using ToDoListWebApi.ViewModels.ToDoListViewModels;
 
-namespace ToDoListWebApi.Infrastructure.Mapping
+namespace ToDoListWebApi.Infrastructure.Mapping;
+
+public class MapperProfile : Profile
 {
-    public class MapperProfile : Profile
+    public MapperProfile()
     {
-        public MapperProfile()
-        {
-            CreateMap<ToDoTask, ToDoTaskViewModel>().ReverseMap();
-        }
+        CreateMap<ToDoTask, ToDoTaskViewModel>().ReverseMap();
     }
 }

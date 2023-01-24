@@ -1,7 +1,6 @@
-﻿namespace ToDoListWebApi.Services.Models.Requests
+﻿namespace ToDoListWebApi.Services.Models.Requests;
+
+public class GetToDoTaskByIdAsyncRequest
 {
-    public class GetToDoTaskByIdAsyncRequest
-    {
-        public int TaskId { get; set; }
-    }
+    public int TaskId { get; set; }
 }

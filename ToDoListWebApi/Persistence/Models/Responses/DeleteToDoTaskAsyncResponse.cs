@@ -1,6 +1,5 @@
-﻿namespace ToDoListWebApi.Persistence.Models.Responses
+﻿namespace ToDoListWebApi.Persistence.Models.Responses;
+
+public class DeleteToDoTaskAsyncResponse : BaseResponse
 {
-    public class DeleteToDoTaskAsyncResponse : BaseResponse
-    {
-    }
 }

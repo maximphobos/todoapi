@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 
-namespace ToDoListWebApi.ViewModels.ToDoListViewModels
+namespace ToDoListWebApi.ViewModels.ToDoListViewModels;
+
+public class ToDoTaskViewModelValidator : AbstractValidator<ToDoTaskViewModel>
 {
-    public class ToDoTaskViewModelValidator : AbstractValidator<ToDoTaskViewModel>
+    public ToDoTaskViewModelValidator()
     {
-        public ToDoTaskViewModelValidator()
-        {
-            RuleFor(p => p.TaskBodyText).NotNull().NotEmpty();
-        }
+        RuleFor(p => p.TaskBodyText).NotNull().NotEmpty();
     }
 }

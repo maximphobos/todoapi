@@ -1,6 +1,5 @@
-﻿namespace ToDoListWebApi.Services.Models.Responses
+﻿namespace ToDoListWebApi.Services.Models.Responses;
+
+public class DeleteToDoTaskAsyncResponse : BaseResponse
 {
-    public class DeleteToDoTaskAsyncResponse : BaseResponse
-    {
-    }
 }

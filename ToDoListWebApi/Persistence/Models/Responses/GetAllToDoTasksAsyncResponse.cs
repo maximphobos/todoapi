@@ -1,7 +1,6 @@
-﻿namespace ToDoListWebApi.Persistence.Models.Responses
+﻿namespace ToDoListWebApi.Persistence.Models.Responses;
+
+public class GetAllToDoTasksAsyncResponse : BaseResponse
 {
-    public class GetAllToDoTasksAsyncResponse : BaseResponse
-    {
-        public List<ToDoTask>? ToDoTasks { get; set; }
-    }
+    public List<ToDoTask>? ToDoTasks { get; set; }
 }

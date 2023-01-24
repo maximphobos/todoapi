@@ -1,7 +1,6 @@
-﻿namespace ToDoListWebApi.ViewModels.ToDoListViewModels
+﻿namespace ToDoListWebApi.ViewModels.ToDoListViewModels;
+
+public class ToDoTaskAddViewModel
 {
-    public class ToDoTaskAddViewModel
-    {
-        public string TaskBodyText { get; set; } = String.Empty;
-    }
+    public string TaskBodyText { get; set; } = String.Empty;
 }
