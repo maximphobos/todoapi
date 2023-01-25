@@ -10,7 +10,7 @@ public class ToDoListContext : DbContext
     {
     }
 
-    public virtual DbSet<ToDoTask> ToDoTasks { get; set; } = null!;
+    public virtual DbSet<ToDoTask> ToDoTasks => Set<ToDoTask>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
