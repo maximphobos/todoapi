@@ -24,10 +24,12 @@ public class TasksController : ControllerBase
 
         if (!result.Error)
         {
+            result.SuccessMessage = "Successfully done";
             return result;
         }
         else
         {
+            result.ErrorMessage = "Done with error";
             return BadRequest(result);
         }
     }
@@ -42,10 +44,12 @@ public class TasksController : ControllerBase
 
         if (!result.Error)
         {
+            result.SuccessMessage = "Successfully done";
             return result;
         }
         else
         {
+            result.ErrorMessage = "Done with error";
             return BadRequest(result);
         }
     }
@@ -64,10 +68,12 @@ public class TasksController : ControllerBase
 
         if (!result.Error)
         {
+            result.SuccessMessage = "Successfully done";
             return result;
         }
         else
         {
+            result.ErrorMessage = "Done with error";
             return BadRequest(result);
         }
     }
@@ -82,10 +88,12 @@ public class TasksController : ControllerBase
 
         if (!result.Error)
         {
+            result.SuccessMessage = "Successfully done";
             return result;
         }
         else
         {
+            result.ErrorMessage = "Done with error";
             return BadRequest(result);
         }
     }
