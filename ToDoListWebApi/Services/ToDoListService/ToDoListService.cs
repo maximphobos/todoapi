@@ -1,11 +1,11 @@
 ﻿using ToDoListWebApi.Infrastructure.Mapping;
 using ToDoListWebApi.Persistence.Models;
 using ToDoListWebApi.Persistence.Repositories;
-using ToDoListWebApi.Services.Models.Requests;
-using ToDoListWebApi.Services.Models.Responses;
+using ToDoListWebApi.Services.ToDoListService.Models.Requests;
+using ToDoListWebApi.Services.ToDoListService.Models.Responses;
 using ToDoListWebApi.ViewModels.ToDoListViewModels;
 
-namespace ToDoListWebApi.Services;
+namespace ToDoListWebApi.Services.ToDoListService;
 
 public class ToDoListService : IToDoListService
 {
