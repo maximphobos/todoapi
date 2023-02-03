@@ -1,7 +1,7 @@
-﻿using ToDoListWebApi.Services.Models.Requests;
-using ToDoListWebApi.Services.Models.Responses;
+﻿using ToDoListWebApi.Services.ToDoListService.Models.Requests;
+using ToDoListWebApi.Services.ToDoListService.Models.Responses;
 
-namespace ToDoListWebApi.Services;
+namespace ToDoListWebApi.Services.ToDoListService;
 
 public interface IToDoListService
 {

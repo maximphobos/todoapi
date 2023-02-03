@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ToDoListWebApi.Services;
-using ToDoListWebApi.Services.Models.Requests;
-using ToDoListWebApi.Services.Models.Responses;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ToDoListWebApi.Services.ToDoListService;
+using ToDoListWebApi.Services.ToDoListService.Models.Requests;
+using ToDoListWebApi.Services.ToDoListService.Models.Responses;
 using ToDoListWebApi.ViewModels.ToDoListViewModels;
 
 namespace ToDoListWebApi.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class TasksController : ControllerBase
@@ -17,6 +19,7 @@ public class TasksController : ControllerBase
         _toDoListService = toDoListService;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<GetAllToDoTasksAsyncResponse>> GetAllToDoTasksAsync()
     {

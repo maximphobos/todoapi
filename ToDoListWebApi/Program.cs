@@ -1,3 +1,4 @@
+using ToDoListWebApi.Infrastructure.Identity;
 using ToDoListWebApi.Infrastructure.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,11 @@ builder.Services.AddServices()
 .AddLoggerServices()
 .AddDbContextServices()
 .AddRepositoryServices()
-.AddInfrastructureServices();
+.AddInfrastructureServices()
+.AddIdentity()
+.AddCustomAuthentication(builder);
+
+RolesConfiguration.CreateUserRoles(builder.Services).Wait();
 
 var app = builder.Build();
 
@@ -22,5 +27,8 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
     options.RoutePrefix = string.Empty;
 });
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();
