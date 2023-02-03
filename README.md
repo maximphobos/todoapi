@@ -6,6 +6,7 @@ To run the application please, do the required steps below:
 1. Build app
 2. Set your connection string details in appsettings.json for the DefaultConnection (change existing)
 3. In Visual Studio Package Manager Console run:
-   Update-Database -Context ApplicationDbContext
+   Update-Database -Context ApplicationDbContext 
+   and 
    Update-Database -Context ToDoListContext  
 4. Run app and test it in Swagger UI
