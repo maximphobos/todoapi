@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using ToDoListWebApi.Infrastructure.Identity;
 using ToDoListWebApi.Infrastructure.IoC;
 
@@ -12,6 +14,8 @@ builder.Services.AddServices()
 .AddInfrastructureServices()
 .AddIdentity()
 .AddCustomAuthentication(builder);
+
+builder.Services.AddHealthChecks();
 
 RolesConfiguration.CreateUserRoles(builder.Services).Wait();
 
@@ -30,5 +34,15 @@ app.UseSwaggerUI(options =>
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHealthChecks("/healthz", new HealthCheckOptions
+{
+    ResultStatusCodes =
+    {
+        [HealthStatus.Healthy] = StatusCodes.Status200OK,
+        [HealthStatus.Degraded] = StatusCodes.Status200OK,
+        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+    }
+}).RequireAuthorization();
 
 app.Run();
