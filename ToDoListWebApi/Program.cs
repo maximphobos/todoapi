@@ -1,21 +1,30 @@
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+using ToDoListWebApi.Infrastructure.HealthChecks;
 using ToDoListWebApi.Infrastructure.Identity;
 using ToDoListWebApi.Infrastructure.IoC;
+using ToDoListWebApi.Persistence.Contexts;
+using ToDoListWebApi.Persistence.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+
+IConfigurationRoot configuration = new ConfigurationBuilder()
+               .SetBasePath(Directory.GetCurrentDirectory())
+               .AddJsonFile("appsettings.json")
+               .Build();
 
 builder.Services.AddServices()
 .AddFluentValidationServices()
 .AddSwaggerServices()
 .AddLoggerServices()
-.AddDbContextServices()
+.AddDbContextServices(configuration)
 .AddRepositoryServices()
 .AddInfrastructureServices()
 .AddIdentity()
 .AddCustomAuthentication(builder);
 
-builder.Services.AddHealthChecks();
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>()
+    .AddDbContextCheck<ToDoListContext>()
+    .AddSqlServer(configuration.GetConnectionString("DefaultConnection")!);
 
 RolesConfiguration.CreateUserRoles(builder.Services).Wait();
 
@@ -35,14 +44,6 @@ app.UseSwaggerUI(options =>
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapHealthChecks("/healthz", new HealthCheckOptions
-{
-    ResultStatusCodes =
-    {
-        [HealthStatus.Healthy] = StatusCodes.Status200OK,
-        [HealthStatus.Degraded] = StatusCodes.Status200OK,
-        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
-    }
-}).RequireAuthorization();
+app.MapHealthCheck();
 
 app.Run();
