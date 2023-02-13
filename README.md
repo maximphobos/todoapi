@@ -5,8 +5,7 @@ You should have installed MsSQL server on your machine to use this app (or, if y
 To run the application please, do the required steps below:
 1. Build app
 2. Set your connection string details in appsettings.json for the DefaultConnection (change existing)
-3. In Visual Studio Package Manager Console run:
-   Update-Database -Context ApplicationDbContext 
-   and 
-   Update-Database -Context ToDoListContext  
-4. Run app and test it in Swagger UI
+3. Comment line number 20 in Program.cs (RolesConfiguration.CreateUserRoles(builder.Services).Wait();) and build application
+4. In Visual Studio Package Manager Console run: Update-Database -Context ApplicationDbContext and Update-Database -Context ToDoListContext  
+5. Uncomment line number 20 in Program.cs (RolesConfiguration.CreateUserRoles(builder.Services).Wait();) and build application
+6. Run app and test it in Swagger UI
