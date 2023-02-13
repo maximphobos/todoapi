@@ -15,6 +15,7 @@ using ToDoListWebApi.Persistence.Models.Identity;
 using ToDoListWebApi.Persistence.Repositories;
 using ToDoListWebApi.Services.UserService;
 using ToDoListWebApi.Services.ToDoListService;
+using Microsoft.EntityFrameworkCore;
 
 namespace ToDoListWebApi.Infrastructure.IoC;
 
@@ -78,10 +79,12 @@ public static class ServiceCollection
         return services;
     }
 
-    public static IServiceCollection AddDbContextServices(this IServiceCollection services)
+    public static IServiceCollection AddDbContextServices(this IServiceCollection services, IConfigurationRoot configuration)
     {
-        services.AddDbContext<ApplicationDbContext>();
-        services.AddDbContext<ToDoListContext>();
+        services.AddDbContext<ApplicationDbContext>
+            (options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+        services.AddDbContext<ToDoListContext>
+            (options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));       
 
         return services;
     }
