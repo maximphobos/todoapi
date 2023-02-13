@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using ToDoListWebApi.Infrastructure.GlobalExceptionHandling;
 using ToDoListWebApi.Services.ToDoListService;
 using ToDoListWebApi.Services.ToDoListService.Models.Requests;
 using ToDoListWebApi.Services.ToDoListService.Models.Responses;
@@ -13,10 +15,13 @@ namespace ToDoListWebApi.Controllers;
 public class TasksController : ControllerBase
 {
     private readonly IToDoListService _toDoListService;
+    private readonly IStringLocalizer<TasksController> _localizer;
 
-    public TasksController(IToDoListService toDoListService)
+    public TasksController(IToDoListService toDoListService,
+        IStringLocalizer<TasksController> localizer)
     {
         _toDoListService = toDoListService;
+        _localizer = localizer;
     }
 
     [AllowAnonymous]
@@ -47,8 +52,15 @@ public class TasksController : ControllerBase
 
         if (!result.Error)
         {
-            result.SuccessMessage = "Successfully done";
-            return result;
+            if (result.ToDoTaskViewModel != null)
+            {
+                result.SuccessMessage = "Successfully done";
+                return result;
+            }
+            else
+            {
+                throw new NotFoundException(_localizer["TaskNotFoundById", taskId.ToString()]);
+            }
         }
         else
         {

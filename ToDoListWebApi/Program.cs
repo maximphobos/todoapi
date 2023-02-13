@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+using ToDoListWebApi.Infrastructure.GlobalExceptionHandling;
 using ToDoListWebApi.Infrastructure.HealthChecks;
 using ToDoListWebApi.Infrastructure.Identity;
 using ToDoListWebApi.Infrastructure.IoC;
@@ -21,6 +24,8 @@ builder.Services.AddServices()
 .AddIdentity()
 .AddCustomAuthentication(builder);
 
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<ApplicationDbContext>()
     .AddDbContextCheck<ToDoListContext>()
@@ -29,6 +34,8 @@ builder.Services.AddHealthChecks()
 RolesConfiguration.CreateUserRoles(builder.Services).Wait();
 
 var app = builder.Build();
+
+app.UseMiddleware(typeof(GlobalErrorHandlingMiddleware));
 
 // Configure the HTTP request pipeline.
 app.MapControllers();
@@ -45,5 +52,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapHealthCheck();
+
+var supportedCultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures,
+    ApplyCurrentCultureToResponseHeaders= true
+});
 
 app.Run();

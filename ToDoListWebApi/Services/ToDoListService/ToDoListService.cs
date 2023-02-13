@@ -72,8 +72,16 @@ public class ToDoListService : IToDoListService
                 getToDoTaskByIdAsyncResponse.ToDoTaskViewModel = _modelMapper.MapTo<ToDoTaskViewModel>(result.ToDoTask);
                 getToDoTaskByIdAsyncResponse.SuccessMessage = result.SuccessMessage;
 
-                _logger.LogInformation($"GetToDoTaskByIdAsync service method was successfully executed at {DateTime.Now}. " +
-                    $"Message: {result.SuccessMessage}");
+                _logger.LogInformation($"GetToDoTaskByIdAsync service method was successfully executed at {DateTime.Now}, and " +
+                    $"task with Id={request.TaskId} was successfully found.");
+            }
+            else if (!result.Error && result.ToDoTask == null)
+            {
+                getToDoTaskByIdAsyncResponse.ToDoTaskViewModel = null;
+                getToDoTaskByIdAsyncResponse.SuccessMessage = result.SuccessMessage;
+
+                _logger.LogInformation($"GetToDoTaskByIdAsync service method was successfully executed at {DateTime.Now}, but " +
+                    $"task with Id={request.TaskId} not found.");
             }
             else
             {

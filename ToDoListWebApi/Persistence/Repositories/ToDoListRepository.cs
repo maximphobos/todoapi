@@ -45,17 +45,7 @@ public class ToDoListRepository : IToDoListRepository
             if (dbSet != null)
             {
                 var result = await dbSet.FirstOrDefaultAsync(t => t.Id == taskId);
-
-                if (result != null)
-                {
-                    getToDoTaskByIdAsyncResponse.ToDoTask = result;
-                    getToDoTaskByIdAsyncResponse.SuccessMessage = $"TODO task with Id={result.Id} was successfully found.";
-                }
-                else
-                {
-                    getToDoTaskByIdAsyncResponse.Error = true;
-                    getToDoTaskByIdAsyncResponse.ErrorMessage = $"TODO task with Id={taskId} was not found.";
-                }
+                getToDoTaskByIdAsyncResponse.ToDoTask = result;
             }
             else
             {
